@@ -25,3 +25,20 @@ export async function createTask({ title, description, category }){
         body: JSON.stringify({title: title, description: description, category: category })
     });
 }
+
+        
+export async function updateTask({ task_id, title, description, category, status }){
+    const updates = Object.fromEntries(
+        Object.entries({ title, description, category, status }).filter(([key, value]) => {
+            console.log(key);
+            console.log(value);
+            return value != null || value != '' || value != undefined;
+        })
+    );
+    console.log(updates);
+    return await fetch(`${BASE_URL}/api/tasks/${task_id}`, {
+        credentials: 'include', 
+        method: 'patch',
+        body: JSON.stringify({ ...updates })
+    });
+}

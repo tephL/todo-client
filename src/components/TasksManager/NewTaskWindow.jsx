@@ -64,6 +64,7 @@ function NewTaskWindow(){
 
     return (
         <div hidden={newTaskWindowVisibility}>
+            <button onClick={exitNewTask}>x</button>
             <p>{ newTaskMessageBox }</p>
             <p>New task</p>
             <button onClick={exitNewTask}>x</button>
