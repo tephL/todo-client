@@ -1,5 +1,7 @@
 import { useContext, useState, useRef, useEffect } from "react"
 
+import styles from '@/components/TasksManager/UpdateTaskWindow.module.css';
+
 import { TasksMessageContext, TasksContext, UpdateTaskContext } from "@/pages/TasksManager"
 import * as taskServ from '@/services/tasks-serv.js';
 
@@ -17,15 +19,24 @@ function UpdateTaskWindow(){
     // assign upon mount
     useEffect(() => {
         storedTask.current = updateTask;
-    }, [updateTask]);
+    }, [updateTaskWindowVisibility]);
 
     async function handleSubmit(){
-        console.log(updateTask);
-        return;
-        if(newTask.title == ''){
+        if(updateTask.title == storedTask.current.title && 
+            updateTask.description == storedTask.current.description && 
+            updateTask.category == storedTask.current.category && 
+            updateTask.status == storedTask.current.status 
+        ){
+            exitUpdateTask();
+            return setTasksMessage('No changes have been made');
+        }
+
+        if(updateTask.title == ''){
             titleInputRef.current.focus();
             return setUpdateTaskMessageBox('Title must be provided');
         };
+
+        const { task_id, title, description, category, status } = updateTask;
 
         await taskServ.updateTask({ task_id, title, description, category, status })
         .then(async res => {
@@ -34,7 +45,6 @@ function UpdateTaskWindow(){
             return await res.json();
         })
         .then(data => {
-            setTasks(ts => [...ts, data]);
             console.log(data);
             setUpdateTaskWindowVisibility(true);
             setUpdateTaskMessageBox('');
@@ -51,9 +61,15 @@ function UpdateTaskWindow(){
     function handleCategorySelection(e){
         const chosen_category = `${e.currentTarget.innerHTML}`.toLowerCase();
         setUpdateTask((nt) => { return { ...nt, category: chosen_category }});
+        console.log(updateTask);
     }
 
     function exitUpdateTask(){
+        setUpdateTask(t => Object.fromEntries(
+            Object.entries(t).map(([key, value]) => {
+                return [key, ''];
+            })
+        ));
         setUpdateTaskWindowVisibility(true);
     }
 
@@ -66,9 +82,9 @@ function UpdateTaskWindow(){
             <input ref={titleInputRef} defaultValue={updateTask.title} onChange={e => setUpdateTask(nt => { return { ...nt, title: e.target.value } })} placeholder="Title" type="text" />
             <textarea defaultValue={updateTask.description} onChange={e => setUpdateTask(nt => { return { ...nt, description: e.target.value } })} cols="30" rows="10" placeholder="Description"></textarea>
             <div>
-                <p onClick={handleCategorySelection}>Brainrot</p>
-                <p onClick={handleCategorySelection}>Sahur</p>
-                <p onClick={handleCategorySelection}>W-maxxing</p>
+                <p className={updateTask.category == 'brainrot' ? styles['selected-category'] : ''} onClick={handleCategorySelection}>Brainrot</p>
+                <p className={updateTask.category == 'sahur' ? styles['selected-category'] : ''} onClick={handleCategorySelection}>Sahur</p>
+                <p className={updateTask.category == 'w-maxxing' ? styles['selected-category'] : ''} onClick={handleCategorySelection}>W-maxxing</p>
             </div>
             <button onClick={handleSubmit}>Submit</button>
         </div>

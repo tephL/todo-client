@@ -1,5 +1,7 @@
 import { useContext, useState, useRef } from "react"
 
+import styles from '@/components/TasksManager/NewTaskWindow.module.css';
+
 import { TasksMessageContext, TasksContext } from "@/pages/TasksManager"
 import * as taskServ from '@/services/tasks-serv.js';
 
@@ -54,10 +56,16 @@ function NewTaskWindow(){
 
     function handleCategorySelection(e){
         const chosen_category = `${e.currentTarget.innerHTML}`.toLowerCase();
+        
         setNewTask((nt) => { return { ...nt, category: chosen_category }});
     }
 
     function exitNewTask(){
+        setNewTask({
+            title: '', 
+            description: '',
+            category: ''
+        });
         console.log(newTaskWindowVisibility);
         setNewTaskWindowVisibility(true);
     }
@@ -68,12 +76,12 @@ function NewTaskWindow(){
             <p>{ newTaskMessageBox }</p>
             <p>New task</p>
             <button onClick={exitNewTask}>x</button>
-            <input ref={titleInputRef} onChange={e => setNewTask(nt => { return { ...nt, title: e.target.value } })} placeholder="Title" type="text" />
-            <textarea onChange={e => setNewTask(nt => { return { ...nt, description: e.target.value } })} cols="30" rows="10" placeholder="Description"></textarea>
+            <input ref={titleInputRef} value={newTask.title} onChange={e => setNewTask(nt => { return { ...nt, title: e.target.value } })} placeholder="Title" type="text" />
+            <textarea value={newTask.description} onChange={e => setNewTask(nt => { return { ...nt, description: e.target.value } })} cols="30" rows="10" placeholder="Description"></textarea>
             <div ref={categoryInputRef}>
-                <p onClick={handleCategorySelection}>Brainrot</p>
-                <p onClick={handleCategorySelection}>Sahur</p>
-                <p onClick={handleCategorySelection}>W-maxxing</p>
+                <p className={newTask.category == 'brainrot' ? styles['chosen-category'] : ''} onClick={handleCategorySelection}>Brainrot</p>
+                <p className={newTask.category =='sahur' ? styles['chosen-category'] : ''} onClick={handleCategorySelection}>Sahur</p>
+                <p className={newTask.category =='w-maxxing' ? styles['chosen-category'] : ''} onClick={handleCategorySelection}>W-maxxing</p>
             </div>
             <button onClick={handleSubmit}>Submit</button>
         </div>
