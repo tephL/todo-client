@@ -46,6 +46,12 @@ function UpdateTaskWindow(){
         })
         .then(data => {
             console.log(data);
+            setTasks(ts => ts.map(t => {
+                if(t.task_id == data.task_id){
+                    return data;
+                }
+                return t;
+            }));
             setUpdateTaskWindowVisibility(true);
             setUpdateTaskMessageBox('');
             setTasksMessage("Successfully updated task");
