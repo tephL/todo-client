@@ -1,4 +1,5 @@
 import { useContext, useState } from "react";
+import { useNavigate } from "react-router";
 import * as authServ from '@/services/auth-serv.js';
 import { AuthContext } from "@/components/AuthLayout";
 
@@ -7,6 +8,8 @@ function Login(){
     const [ password, setPassword ] = useState();
     const [ message, setMessage ] = useState();
     const { user, setUser } = useContext(AuthContext);
+
+    const navigate = useNavigate();
 
     async function handleLogin(){
         if(username.length < 5) return setMessage("Username must be be atleast 5 characters");
