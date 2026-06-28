@@ -8,6 +8,7 @@ function AuthLayout({ children }){
     const navigate = useNavigate();
 
     useEffect(() => {
+        console.log(user);
         if(user) navigate('/');
     }, [user]);
 

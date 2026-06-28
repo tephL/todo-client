@@ -1,7 +1,7 @@
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export async function login(username, password){
-    const res = await fetch(`${BASE_URL}/api/auth/login`, {
+    return await fetch(`${BASE_URL}/api/auth/login`, {
         method: 'post',
         credentials: 'include', 
         headers: {
@@ -13,9 +13,15 @@ export async function login(username, password){
 }
 
 export async function logout(){
-    const res = await fetch(`${BASE_URL}/api/auth/logout`, {
+    return await fetch(`${BASE_URL}/api/auth/logout`, {
         method: 'delete', 
         credentials: 'include',
     });
-    return res;
+}
+
+export async function whoAmI(){
+    return await fetch(`${BASE_URL}/api/auth/me`, {
+        credentials: 'include',
+        method: 'get'
+    })
 }
