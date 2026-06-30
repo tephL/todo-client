@@ -7,3 +7,9 @@ export async function fetchTasks(page, limit){
     });
 }
 
+export async function deleteTask(task_id){
+    return await fetch(`${BASE_URL}/api/tasks/${task_id}`, {
+        method: 'delete',
+        credentials: 'include'
+    });
+}
