@@ -1,12 +1,13 @@
 import { useState, useEffect, useContext } from "react";
 
 import * as taskServ from '@/services/tasks-serv.js';
-import { TasksMessageContext } from "@/pages/TasksManager"
+import { TasksMessageContext, TasksContext } from "@/pages/TasksManager"
 
 function TasksList(){
-    const [ tasks, setTasks ] = useState([]);
+    const { tasks, setTasks } = useContext(TasksContext);
     const [ page, setPage ] = useState(1);
     const { setTasksMessage }  = useContext(TasksMessageContext);
+    const { setNewTaskWindowVisibility }  = useContext(TasksMessageContext);
 
     useEffect(() => {
         taskServ.fetchTasks(page, 20)
@@ -28,19 +29,15 @@ function TasksList(){
         });
     }, [page]);
 
-    let displayTasks = tasks.map(t =>
-        <tr key={t.task_id} data-task-id={t.task_id}>
-            <td>{t.title}</td>
-            <td>{t.description}</td>
-            <td>{t.status}</td>
-            <td>{t.category}</td>
-            <td>
-                <div>
-                    <button onClick={() => handleDelete(t)}>Delete</button>
-                </div>
-            </td>
-        </tr>
-    );
+    let displayTasks = tasks.map(t => {
+        return <div>
+            <button onClick={() => handleDelete(t)}>x</button>
+            
+            <p>{t.title}</p>
+            <p>{t.description}</p>
+            <p>{t.category}</p>
+        </div>
+    });
 
     async function handleDelete(task){
         if(!window.confirm(`Are you sure you want to delete '${task.title}'?`)) return;
@@ -59,34 +56,18 @@ function TasksList(){
 
     }
 
+    function toggleNewTask(){
+        setNewTaskWindowVisibility(false);
+    }
+
     return (
         <div>
-            <table>
-            <colgroup>
-                <col id="title"/>
-                <col id="description"/>
-                <col id="status"/>
-                <col id="category"/>
-            </colgroup>
-
-            <thead>
-                <tr>
-                    <td>title</td>
-                    <td>description</td>
-                    <td>status</td>
-                    <td>category</td>
-                    <td>actions</td>
-                </tr>
-            </thead>
-
-            <tbody>
-                { 
-                    tasks.length === 0 ? 
-                    <tr><td>'No task'</td></tr> :
-                    displayTasks 
-                }
-            </tbody>
-            </table>
+            <button onClick={toggleNewTask}>New Task</button>
+            { 
+                tasks.length === 0 ? 
+                <p>'No task'</p> :
+                displayTasks 
+            }
         </div>
     )
 }

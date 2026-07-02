@@ -13,3 +13,15 @@ export async function deleteTask(task_id){
         credentials: 'include'
     });
 }
+
+export async function createTask({ title, description, category }){
+    console.log(category);
+    return await fetch(`${BASE_URL}/api/tasks`, {
+        method: 'post',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({title: title, description: description, category: category })
+    });
+}
