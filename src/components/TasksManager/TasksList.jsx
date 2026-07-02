@@ -6,7 +6,7 @@ import { TasksMessageContext } from "@/pages/TasksManager"
 function TasksList(){
     const [ tasks, setTasks ] = useState([]);
     const [ page, setPage ] = useState(1);
-    const { tasksError, setTasksMessage } = useContext(TasksMessageContext);
+    const { setTasksMessage }  = useContext(TasksMessageContext);
 
     useEffect(() => {
         taskServ.fetchTasks(page, 20)
@@ -15,12 +15,13 @@ function TasksList(){
             if(res.ok) return await res.json();
         })
         .then(data => {
-            console.log(data);
             let tasks = data?.tasks;
             setTasks(tasks);
         })
         .catch(err => {
-            if(err.message == 204){ return null } 
+            if(err.message == 204){ 
+                return null ;
+            } 
             else {
                 setTasksMessage('There was an error getting the data');
             }
@@ -79,7 +80,11 @@ function TasksList(){
             </thead>
 
             <tbody>
-                { displayTasks }
+                { 
+                    tasks.length === 0 ? 
+                    <tr><td>'No task'</td></tr> :
+                    displayTasks 
+                }
             </tbody>
             </table>
         </div>
