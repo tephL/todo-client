@@ -14,7 +14,10 @@ function ProtectedRoutes(){
                 res.ok ? 
                 setUser(await res.json()) : 
                 navigate('/login') 
-            );
+            )
+            .catch(e => {
+                navigate('/login') 
+            });
     }, []);
 
     return (

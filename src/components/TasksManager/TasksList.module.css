@@ -1,0 +1,22 @@
+.tasks{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.task-container{
+    border: 1px solid;
+    width: 300px;
+}
+
+.done{
+    background-color: #c0ffd4;
+}
+
+.ongoing{
+    background-color: #a0c9ff;
+}
+
+.not_done{
+    background-color: pink;
+}
