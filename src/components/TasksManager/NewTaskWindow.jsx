@@ -40,7 +40,7 @@ function NewTaskWindow(){
             return await res.json();
         })
         .then(data => {
-            setTasks(ts => [...ts, data]);
+            setTasks(ts => [data, ...ts]);
             console.log(data);
             setNewTaskWindowVisibility(true);
             setNewTaskMessageBox('');

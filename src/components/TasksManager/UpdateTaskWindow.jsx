@@ -19,6 +19,7 @@ function UpdateTaskWindow(){
     // assign upon mount
     useEffect(() => {
         storedTask.current = updateTask;
+        console.log(updateTask);
     }, [updateTaskWindowVisibility]);
 
     async function handleSubmit(){
@@ -79,6 +80,12 @@ function UpdateTaskWindow(){
         setUpdateTaskWindowVisibility(true);
     }
 
+    function handleStatusSelection(e){
+        const chosen_status = `${e.currentTarget.innerHTML}`.toLowerCase().replace(' ', '_');
+        console.log(chosen_status);
+        setUpdateTask(nt => { return { ...nt, status: chosen_status }});
+    }
+
     return (
         <div hidden={updateTaskWindowVisibility}>
             <button onClick={exitUpdateTask}>x</button>
@@ -88,9 +95,16 @@ function UpdateTaskWindow(){
             <input ref={titleInputRef} defaultValue={updateTask.title} onChange={e => setUpdateTask(nt => { return { ...nt, title: e.target.value } })} placeholder="Title" type="text" />
             <textarea defaultValue={updateTask.description} onChange={e => setUpdateTask(nt => { return { ...nt, description: e.target.value } })} cols="30" rows="10" placeholder="Description"></textarea>
             <div>
+                <p>Category</p>
                 <p className={updateTask.category == 'brainrot' ? styles['selected-category'] : ''} onClick={handleCategorySelection}>Brainrot</p>
                 <p className={updateTask.category == 'sahur' ? styles['selected-category'] : ''} onClick={handleCategorySelection}>Sahur</p>
                 <p className={updateTask.category == 'w-maxxing' ? styles['selected-category'] : ''} onClick={handleCategorySelection}>W-maxxing</p>
+            </div>
+            <div>
+                <p>Status</p>
+                <p className={updateTask.status == 'not_done' ? styles['selected-status'] : ''} onClick={handleStatusSelection}>Not done</p>
+                <p className={updateTask.status == 'ongoing' ? styles['selected-status'] : ''} onClick={handleStatusSelection}>Ongoing</p>
+                <p className={updateTask.status == 'done' ? styles['selected-status'] : ''} onClick={handleStatusSelection}>Done</p>
             </div>
             <button onClick={handleSubmit}>Submit</button>
         </div>
