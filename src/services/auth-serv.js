@@ -25,3 +25,14 @@ export async function whoAmI(){
         method: 'get'
     })
 }
+
+export async function registerUser({username, password}){
+    return await fetch(`${BASE_URL}/api/register`, {
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json'
+        }, 
+        body: JSON.stringify({ username: username, password: password }),
+        method: 'post'
+    });
+}

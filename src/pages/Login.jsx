@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, NavLink } from "react-router";
 import * as authServ from '@/services/auth-serv.js';
 import { AuthContext } from "@/components/AuthLayout";
 
@@ -23,10 +23,13 @@ function Login(){
 
     return (
         <div>
+            <p>todo by tephL</p>
+            <p>on progress</p>
             <p>{message}</p>
             Username: <input onChange={(e) => setUsername(e.currentTarget.value)} type="text" />
             Password: <input onChange={(e) => setPassword(e.currentTarget.value)} type="password" />
             <button onClick={handleLogin}>Login</button>
+            <p>Dont have an account? <NavLink to={'/register'}>Register</NavLink></p>
         </div>
     )
 }
